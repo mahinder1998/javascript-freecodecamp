@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar Toggle</title>
+    <style>
+        .show-menu{
+            display: none;
+        }
+        @media(max-width:767px){
+            .show-menu{
+                display: block;
+            }
+            .menu-wrap{
+                display: none;
+            }
+            .menu-wrap.active{
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <!-- header -->
+        <header>
+            <!-- logo -->
+            <div class="logo">
+                <img src="" alt="">
+            </div>
+            <div class="navabr-containr">
+                <button class="show-menu">Menu</button>
+                <ul class="menu-wrap">
+                    <li>Home</li>
+                    <li>About</li>
+                    <li>Projects</li>
+                    <li>Contact</li>
+                </ul>
+            </div>
+        </header>
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
