@@ -19,6 +19,9 @@ form.addEventListener("submit", addItem);
 // clear items
 clearBtn.addEventListener("click", clearItems);
 
+// show items
+//window.addEventListener("DOMContentLoaded", setupItems);
+
 
 // ***** FUNCTIONS *******
 function addItem(e){
@@ -49,47 +52,7 @@ function addItem(e){
     if(value && !editFlag){
         // add item in the list
 
-        /** firt create the html elemnt */
-        const element = document.createElement("article");
-        // add class
-        element.classList.add("grocery-item");
-        // add id
-        const attr = document.createAttribute("data-id");
-        attr.value = id;
-
-        // add attribute over element
-        element.setAttributeNode(attr);
-
-        // add innerHTML inside created element
-        element.innerHTML = `
-            <p class="title">${value}</p>
-            <div class="btn-container">
-                <button type="button" class="edit-btn">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button type="button" class="delete-btn">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-
-        // Important thing::
-        /**
-         * delete buttn and edit button ka yahn pr he access milega 
-         * es function se outer me vo null show hoga 
-         * lekin yahn pr document.querySelector nahi element.querySelector ka use karnage...
-         */
-
-        const deleteBtn = element.querySelector(".delete-btn");
-        const editBtn = element.querySelector(".edit-btn");
-
-        deleteBtn.addEventListener("click", deleteItem);
-        editBtn.addEventListener("click", editItem);
-
-
-        // append child
-        list.appendChild(element);
-
+        createListItem(id, value);
         // display alert
         displayAlert("item added to the list", "success");
         
@@ -110,7 +73,7 @@ function addItem(e){
         displayAlert("value changes", "success");
 
         // Edit local storage
-        //editLocalSorage(editID, value);
+        editLocalSorage(editID, value);
 
         // setBacktoDefault
         setBackToDefault();
@@ -165,7 +128,7 @@ function clearItems(){
     setBackToDefault();
 
     //
-    //localStorage.removeItem("list")
+    localStorage.removeItem("list")
 
 
 }  
@@ -193,8 +156,8 @@ function deleteItem(e){
     // set back to default
     setBackToDefault();
 
-    // remove from local storage
-    //removeFromLocalStorage(id);
+    //remove from local storage
+    removeFromLocalStorage(id);
 
 }
 // editItem
@@ -231,16 +194,81 @@ function setBackToDefault(){
 // ***** LOCAL STORAGE ********
 
 function addToLocalStorage(id, value){
-    console.log("added to local storage")
+
+    /**
+     * Note: if key and value are the same(id:id), only use (id);
+     * this short hand property in ES6(Feature)
+     */
+
+    // const grocery = {id:id, value:value};
+    const grocery = {id,value};
+
+    let items = getLocalStorage();
+        /**
+         * Note:: yahn pr check kargea ki local storage me list name hai ke nahi
+         * yadi nahi hua to empty array [] aa jayega
+         *   -- uske baad array item me grocery object ko push kar dega
+         *   -- then uske baad local storage me set kar dega
+         * yadi hua to vo existing list le aayega
+         * 
+         * --
+         * 
+         */
+
+    items.push(grocery);
+    // setitem in localstorage
+    localStorage.setItem("list", JSON.stringify(items));
+
+
 }
+
+
 
 function removeFromLocalStorage(id){
-    console.log()
+    
+    /**
+     * get item from localStorage
+     * 
+     */
+    let items = getLocalStorage();
+
+    /**
+     * yahn filter karange ki item ki id similer nahi hai to item ko return kar denge
+     */
+    items = items.filter(function (item){
+        if(item.id !== id){
+            return item;
+        }
+    })
+    // setitem in localstorage
+    localStorage.setItem("list", JSON.stringify(items));
+
 }
 
-function editLocalSorage(id, value){};
+function editLocalSorage(id, value){
+    let items = getLocalStorage();
+    items.forEach(function(item){
+        if(item.id === id){
+            item.value = value
+        }
+
+        return item;
+    })
+    localStorage.setItem("list", JSON.stringify(items));
+};
 
 
+// localstorage
+function getLocalStorage(){
+    return localStorage.getItem("list")
+    ?JSON.parse(localStorage.getItem("list"))
+    :[];
+}
+
+
+/**
+ * This is for reference
+ */
 
 // localStorage API
 // setItem
@@ -248,10 +276,69 @@ function editLocalSorage(id, value){};
 // removeItem
 // save as strings
 
-localStorage.setItem("orange", JSON.stringify(["item", "item2"]));
+// // set item in local storage
+// localStorage.setItem("orange", JSON.stringify(["item", "item2", "item 3"]));
+// // get item in local storage
+// const orangs = JSON.parse(localStorage.getItem("orange"));
+// console.log(orangs, "orangs");
+// // remove item from local storage
+// let aaa = localStorage.removeItem("orange");
 
-localStorage.getItem("orange");
+
+
+
 
 
 // ***** SETUP ITEMS ********
 
+function setupItem(){
+    let items = getLocalStorage();
+    if(items.length > 0){
+
+    }
+}
+
+
+// 
+function createListItem(id, value){
+    /** firt create the html elemnt */
+    const element = document.createElement("article");
+    // add class
+    element.classList.add("grocery-item");
+    // add id
+    const attr = document.createAttribute("data-id");
+    attr.value = id;
+
+    // add attribute over element
+    element.setAttributeNode(attr);
+
+    // add innerHTML inside created element
+    element.innerHTML = `
+        <p class="title">${value}</p>
+        <div class="btn-container">
+            <button type="button" class="edit-btn">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="delete-btn">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
+
+    // Important thing::
+        /**
+         * delete buttn and edit button ka yahn pr he access milega 
+         * es function se outer me vo null show hoga 
+         * lekin yahn pr document.querySelector nahi element.querySelector ka use karnage...
+         */
+
+        const deleteBtn = element.querySelector(".delete-btn");
+        const editBtn = element.querySelector(".edit-btn");
+
+        deleteBtn.addEventListener("click", deleteItem);
+        editBtn.addEventListener("click", editItem);
+
+
+        // append child
+        list.appendChild(element);
+}
