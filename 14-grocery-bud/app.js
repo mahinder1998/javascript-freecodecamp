@@ -13,6 +13,8 @@ let editElement;
 let editFlag = false;
 let editID ="";
 
+
+
 // ***** EVENT LISTENERS *****
 form.addEventListener("submit", addItem);
 
@@ -181,7 +183,7 @@ function editItem(e){
 /***
  * Note:: es function ka use islye kiya gaya hai becuase:: jab bhe user input me item add karta hai
  * to jo value hai vo input me show hoti hai
- * and isko function me isliye banaya gya hai taaki isa reause kar sake.
+ * and isko function me isliye banaya gya hai taaki ise reuse kar sake.
  */
 
 function setBackToDefault(){
@@ -204,16 +206,6 @@ function addToLocalStorage(id, value){
     const grocery = {id,value};
 
     let items = getLocalStorage();
-        /**
-         * Note:: yahn pr check kargea ki local storage me list name hai ke nahi
-         * yadi nahi hua to empty array [] aa jayega
-         *   -- uske baad array item me grocery object ko push kar dega
-         *   -- then uske baad local storage me set kar dega
-         * yadi hua to vo existing list le aayega
-         * 
-         * --
-         * 
-         */
 
     items.push(grocery);
     // setitem in localstorage
@@ -234,6 +226,7 @@ function removeFromLocalStorage(id){
 
     /**
      * yahn filter karange ki item ki id similer nahi hai to item ko return kar denge
+     * agar id similer hui to item ko remove kar denge
      */
     items = items.filter(function (item){
         if(item.id !== id){
@@ -260,6 +253,18 @@ function editLocalSorage(id, value){
 
 // localstorage
 function getLocalStorage(){
+
+     /**
+         * Note:: yahn pr check kargea ki local storage me list name hai ke nahi
+         * yadi nahi hua to empty array [] aa jayega
+         *   -- uske baad array item me grocery object ko push kar dega
+         *   -- then uske baad local storage me set kar dega
+         * yadi hua to vo existing list le aayega
+         * 
+         * --
+         * 
+         */
+
     return localStorage.getItem("list")
     ?JSON.parse(localStorage.getItem("list"))
     :[];
