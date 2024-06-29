@@ -20,7 +20,7 @@ form.addEventListener("submit", addItem);
 clearBtn.addEventListener("click", clearItems);
 
 // show items
-//window.addEventListener("DOMContentLoaded", setupItems);
+window.addEventListener("DOMContentLoaded", setupItems);
 
 
 // ***** FUNCTIONS *******
@@ -291,9 +291,15 @@ function getLocalStorage(){
 
 // ***** SETUP ITEMS ********
 
-function setupItem(){
+function setupItems(){
     let items = getLocalStorage();
     if(items.length > 0){
+        items.forEach(function(item){
+            createListItem(item.id,item.value);
+        })
+
+        // show container
+        container.classList.add("show-container");
 
     }
 }
